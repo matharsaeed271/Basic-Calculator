@@ -148,122 +148,147 @@
 
 ###########################################################################################################################
 
+# import streamlit as st
+# import math
+
+# # --- CONFIG & STYLES ---
+# st.set_page_config(page_title="Pro Calculator", layout="centered")
+
+# # Custom CSS to make it look "Human-Designed" and polished
+# st.markdown("""
+#     <style>
+#     div.stButton > button {
+#         height: 3em;
+#         font-size: 20px;
+#         font-weight: 500;
+#         border-radius: 10px;
+#     }
+#     .main {
+#         background-color: #f5f5f5;
+#     }
+#     </style>
+# """, unsafe_allow_html=True)
+
+# # --- APP STATE MANAGEMENT ---
+# def init_state():
+#     if "display" not in st.session_state:
+#         st.session_state.display = "0"
+#     if "operand_a" not in st.session_state:
+#         st.session_state.operand_a = None
+#     if "operator" not in st.session_state:
+#         st.session_state.operator = None
+#     if "new_num" not in st.session_state:
+#         st.session_state.new_num = False
+
+# init_state()
+
+# # --- LOGIC FUNCTIONS ---
+# def format_number(val):
+#     """Formats float to string, stripping .0 if it's an integer."""
+#     try:
+#         return f"{int(val):,}" if val % 1 == 0 else f"{val:g}"
+#     except:
+#         return "Error"
+
+# def calculate():
+#     if st.session_state.operand_a is None or st.session_state.operator is None:
+#         return
+
+#     try:
+#         a = float(st.session_state.operand_a)
+#         b = float(st.session_state.display.replace(",", ""))
+        
+#         ops = {
+#             "+": lambda x, y: x + y,
+#             "-": lambda x, y: x - y,
+#             "×": lambda x, y: x * y,
+#             "÷": lambda x, y: x / y if y != 0 else "Error"
+#         }
+        
+#         result = ops[st.session_state.operator](a, b)
+#         st.session_state.display = format_number(result) if result != "Error" else "Error"
+#     except Exception:
+#         st.session_state.display = "Error"
+    
+#     st.session_state.operand_a = None
+#     st.session_state.operator = None
+
+# def handle_click(key):
+#     display = st.session_state.display
+
+#     if key.isdigit() or key == ".":
+#         if st.session_state.new_num or display == "0":
+#             st.session_state.display = key if key != "." else "0."
+#             st.session_state.new_num = False
+#         else:
+#             if key == "." and "." in display:
+#                 return
+#             st.session_state.display += key
+
+#     elif key == "AC":
+#         st.session_state.display = "0"
+#         st.session_state.operand_a = None
+#         st.session_state.operator = None
+
+#     elif key == "+/-":
+#         val = float(display.replace(",", "")) * -1
+#         st.session_state.display = format_number(val)
+
+#     elif key == "%":
+#         val = float(display.replace(",", "")) / 100
+#         st.session_state.display = format_number(val)
+
+#     elif key == "√":
+#         val = float(display.replace(",", ""))
+#         st.session_state.display = format_number(math.sqrt(val)) if val >= 0 else "Error"
+
+#     elif key in ["+", "-", "×", "÷"]:
+#         st.session_state.operand_a = display.replace(",", "")
+#         st.session_state.operator = key
+#         st.session_state.new_num = True
+
+#     elif key == "=":
+#         calculate()
+
+# # --- UI LAYOUT ---
+# st.title("🧮 Modern Calculator")
+
+# # High-end display panel
+# st.markdown(f"""
+#     <div style="background-color:#1e1e1e; color:#00ff00; padding:30px; 
+#                 text-align:right; font-size:50px; font-family:monospace; 
+#                 border-radius:10px; margin-bottom:20px; border: 4px solid #333;">
+#         {st.session_state.display}
+#     </div>
+# """, unsafe_allow_html=True)
+
+# # Grid Layout
+# buttons = [
+#     ["AC", "+/-", "%", "÷"],
+#     ["7", "8", "9", "×"],
+#     ["4", "5", "6", "-"],
+#     ["1", "2", "3", "+"],
+#     ["0", ".", "√", "="]
+# ]
+
+# for row in buttons:
+#     cols = st.columns(4)
+#     for i, label in enumerate(row):
+#         if cols[i].button(label, use_container_width=True, key=f"btn_{label}"):
+#             handle_click(label)
+#             st.rerun()
+
+
+##################################################################################################################
+
 import streamlit as st
 import math
 
-# --- CONFIG & STYLES ---
-st.set_page_config(page_title="Pro Calculator", layout="centered")
+# --- Configuration ---
+st.set_page_config(page_title="Human-Style Calculator", layout="centered")
 
-# Custom CSS to make it look "Human-Designed" and polished
-st.markdown("""
-    <style>
-    div.stButton > button {
-        height: 3em;
-        font-size: 20px;
-        font-weight: 500;
-        border-radius: 10px;
-    }
-    .main {
-        background-color: #f5f5f5;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# --- APP STATE MANAGEMENT ---
-def init_state():
-    if "display" not in st.session_state:
-        st.session_state.display = "0"
-    if "operand_a" not in st.session_state:
-        st.session_state.operand_a = None
-    if "operator" not in st.session_state:
-        st.session_state.operator = None
-    if "new_num" not in st.session_state:
-        st.session_state.new_num = False
-
-init_state()
-
-# --- LOGIC FUNCTIONS ---
-def format_number(val):
-    """Formats float to string, stripping .0 if it's an integer."""
-    try:
-        return f"{int(val):,}" if val % 1 == 0 else f"{val:g}"
-    except:
-        return "Error"
-
-def calculate():
-    if st.session_state.operand_a is None or st.session_state.operator is None:
-        return
-
-    try:
-        a = float(st.session_state.operand_a)
-        b = float(st.session_state.display.replace(",", ""))
-        
-        ops = {
-            "+": lambda x, y: x + y,
-            "-": lambda x, y: x - y,
-            "×": lambda x, y: x * y,
-            "÷": lambda x, y: x / y if y != 0 else "Error"
-        }
-        
-        result = ops[st.session_state.operator](a, b)
-        st.session_state.display = format_number(result) if result != "Error" else "Error"
-    except Exception:
-        st.session_state.display = "Error"
-    
-    st.session_state.operand_a = None
-    st.session_state.operator = None
-
-def handle_click(key):
-    display = st.session_state.display
-
-    if key.isdigit() or key == ".":
-        if st.session_state.new_num or display == "0":
-            st.session_state.display = key if key != "." else "0."
-            st.session_state.new_num = False
-        else:
-            if key == "." and "." in display:
-                return
-            st.session_state.display += key
-
-    elif key == "AC":
-        st.session_state.display = "0"
-        st.session_state.operand_a = None
-        st.session_state.operator = None
-
-    elif key == "+/-":
-        val = float(display.replace(",", "")) * -1
-        st.session_state.display = format_number(val)
-
-    elif key == "%":
-        val = float(display.replace(",", "")) / 100
-        st.session_state.display = format_number(val)
-
-    elif key == "√":
-        val = float(display.replace(",", ""))
-        st.session_state.display = format_number(math.sqrt(val)) if val >= 0 else "Error"
-
-    elif key in ["+", "-", "×", "÷"]:
-        st.session_state.operand_a = display.replace(",", "")
-        st.session_state.operator = key
-        st.session_state.new_num = True
-
-    elif key == "=":
-        calculate()
-
-# --- UI LAYOUT ---
-st.title("🧮 Modern Calculator")
-
-# High-end display panel
-st.markdown(f"""
-    <div style="background-color:#1e1e1e; color:#00ff00; padding:30px; 
-                text-align:right; font-size:50px; font-family:monospace; 
-                border-radius:10px; margin-bottom:20px; border: 4px solid #333;">
-        {st.session_state.display}
-    </div>
-""", unsafe_allow_html=True)
-
-# Grid Layout
-buttons = [
+# Define button grid
+BUTTONS = [
     ["AC", "+/-", "%", "÷"],
     ["7", "8", "9", "×"],
     ["4", "5", "6", "-"],
@@ -271,9 +296,69 @@ buttons = [
     ["0", ".", "√", "="]
 ]
 
-for row in buttons:
+# --- State Management ---
+if "display" not in st.session_state:
+    st.session_state.update({"display": "0", "a": None, "op": None})
+
+def format_number(n):
+    """Cleanly format numbers to remove .0 if they are integers."""
+    return f"{n:g}"
+
+def calculate(a, b, op):
+    """Handles the actual math logic."""
+    try:
+        if op == "+": return a + b
+        if op == "-": return a - b
+        if op == "×": return a * b
+        if op == "÷": return a / b if b != 0 else "Error"
+    except Exception:
+        return "Error"
+    return b
+
+# --- Logic Handler ---
+def handle_input(val):
+    if val == "AC":
+        st.session_state.update({"display": "0", "a": None, "op": None})
+    
+    elif val in ["+", "-", "×", "÷"]:
+        st.session_state.a = float(st.session_state.display)
+        st.session_state.op = val
+        st.session_state.display = "0"
+        
+    elif val == "=":
+        if st.session_state.a is not None and st.session_state.op:
+            res = calculate(st.session_state.a, float(st.session_state.display), st.session_state.op)
+            st.session_state.display = str(res)
+            st.session_state.update({"a": None, "op": None})
+            
+    elif val == "+/-":
+        st.session_state.display = format_number(-1 * float(st.session_state.display))
+        
+    elif val == "%":
+        st.session_state.display = format_number(float(st.session_state.display) / 100)
+        
+    elif val == "√":
+        val_float = float(st.session_state.display)
+        st.session_state.display = format_number(math.sqrt(val_float)) if val_float >= 0 else "Error"
+        
+    elif val == ".":
+        if "." not in st.session_state.display:
+            st.session_state.display += "."
+            
+    else: # It's a digit
+        current = st.session_state.display
+        st.session_state.display = val if current == "0" else current + val
+
+# --- UI Components ---
+st.title("Calculator")
+
+# Display area
+st.text_input("Current Value", value=st.session_state.display, disabled=True, label_visibility="collapsed")
+
+# Render Buttons
+for row in BUTTONS:
     cols = st.columns(4)
-    for i, label in enumerate(row):
-        if cols[i].button(label, use_container_width=True, key=f"btn_{label}"):
-            handle_click(label)
+    for i, btn in enumerate(row):
+        if cols[i].button(btn, use_container_width=True):
+            handle_input(btn)
             st.rerun()
