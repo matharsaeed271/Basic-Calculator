@@ -29,7 +29,7 @@ color_white = "white"
 # label = st.Label(frame, text="0", font=("Arial", 45), background=color_black,
 #                       foreground=color_white, anchor="e", width=column_count)
 #####################################################
-label.grid(row=0, column=0, columnspan=column_count, sticky="we")
+# label.grid(row=0, column=0, columnspan=column_count, sticky="we")
 
 for row in range(row_count):
     for column in range(column_count):
