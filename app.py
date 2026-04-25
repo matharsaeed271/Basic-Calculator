@@ -281,84 +281,99 @@
 
 ##################################################################################################################
 
-import streamlit as st
-import math
 
-# --- Configuration ---
-st.set_page_config(page_title="Human-Style Calculator", layout="centered")
+import tkinter as tk
 
-# Define button grid
-BUTTONS = [
-    ["AC", "+/-", "%", "÷"],
-    ["7", "8", "9", "×"],
-    ["4", "5", "6", "-"],
-    ["1", "2", "3", "+"],
-    ["0", ".", "√", "="]
-]
+# ---------------- WINDOW ----------------
+root = tk.Tk()
+root.title("Modern Calculator")
+root.geometry("350x500")
+root.resizable(False, False)
+root.configure(bg="#1e1e1e")
 
-# --- State Management ---
-if "display" not in st.session_state:
-    st.session_state.update({"display": "0", "a": None, "op": None})
+# ---------------- DISPLAY ----------------
+expression = ""
 
-def format_number(n):
-    """Cleanly format numbers to remove .0 if they are integers."""
-    return f"{n:g}"
+display = tk.Entry(root, font=("Arial", 24), bg="#2d2d2d", fg="white",
+                   justify="right", bd=0)
+display.pack(fill="both", ipadx=8, ipady=25, padx=10, pady=20)
 
-def calculate(a, b, op):
-    """Handles the actual math logic."""
+# ---------------- FUNCTIONS ----------------
+def press(num):
+    global expression
+    expression += str(num)
+    display.delete(0, tk.END)
+    display.insert(tk.END, expression)
+
+def clear():
+    global expression
+    expression = ""
+    display.delete(0, tk.END)
+
+def backspace():
+    global expression
+    expression = expression[:-1]
+    display.delete(0, tk.END)
+    display.insert(tk.END, expression)
+
+def equal():
+    global expression
     try:
-        if op == "+": return a + b
-        if op == "-": return a - b
-        if op == "×": return a * b
-        if op == "÷": return a / b if b != 0 else "Error"
-    except Exception:
-        return "Error"
-    return b
+        result = str(eval(expression))
+        display.delete(0, tk.END)
+        display.insert(tk.END, result)
+        expression = result
+    except:
+        display.delete(0, tk.END)
+        display.insert(tk.END, "Error")
+        expression = ""
 
-# --- Logic Handler ---
-def handle_input(val):
-    if val == "AC":
-        st.session_state.update({"display": "0", "a": None, "op": None})
-    
-    elif val in ["+", "-", "×", "÷"]:
-        st.session_state.a = float(st.session_state.display)
-        st.session_state.op = val
-        st.session_state.display = "0"
-        
-    elif val == "=":
-        if st.session_state.a is not None and st.session_state.op:
-            res = calculate(st.session_state.a, float(st.session_state.display), st.session_state.op)
-            st.session_state.display = str(res)
-            st.session_state.update({"a": None, "op": None})
-            
-    elif val == "+/-":
-        st.session_state.display = format_number(-1 * float(st.session_state.display))
-        
-    elif val == "%":
-        st.session_state.display = format_number(float(st.session_state.display) / 100)
-        
-    elif val == "√":
-        val_float = float(st.session_state.display)
-        st.session_state.display = format_number(math.sqrt(val_float)) if val_float >= 0 else "Error"
-        
-    elif val == ".":
-        if "." not in st.session_state.display:
-            st.session_state.display += "."
-            
-    else: # It's a digit
-        current = st.session_state.display
-        st.session_state.display = val if current == "0" else current + val
+# ---------------- BUTTON STYLE ----------------
+btn_font = ("Arial", 18)
+btn_bg = "#333333"
+btn_fg = "white"
+btn_active = "#555555"
 
-# --- UI Components ---
-st.title("Calculator")
+def create_button(text, row, col, command, colspan=1):
+    btn = tk.Button(root, text=text, font=btn_font,
+                    bg=btn_bg, fg=btn_fg,
+                    activebackground=btn_active,
+                    bd=0, command=command)
+    btn.place(x=20 + col*80, y=120 + row*80,
+              width=70, height=70)
 
-# Display area
-st.text_input("Current Value", value=st.session_state.display, disabled=True, label_visibility="collapsed")
+# ---------------- BUTTONS ----------------
+# Row 0
+create_button("C", 0, 0, clear)
+create_button("⌫", 0, 1, backspace)
+create_button("/", 0, 2, lambda: press("/"))
+create_button("*", 0, 3, lambda: press("*"))
 
-# Render Buttons
-for row in BUTTONS:
-    cols = st.columns(4)
-    for i, btn in enumerate(row):
-        if cols[i].button(btn, use_container_width=True):
-            handle_input(btn)
-            st.rerun()
+# Row 1
+create_button("7", 1, 0, lambda: press("7"))
+create_button("8", 1, 1, lambda: press("8"))
+create_button("9", 1, 2, lambda: press("9"))
+create_button("-", 1, 3, lambda: press("-"))
+
+# Row 2
+create_button("4", 2, 0, lambda: press("4"))
+create_button("5", 2, 1, lambda: press("5"))
+create_button("6", 2, 2, lambda: press("6"))
+create_button("+", 2, 3, lambda: press("+"))
+
+# Row 3
+create_button("1", 3, 0, lambda: press("1"))
+create_button("2", 3, 1, lambda: press("2"))
+create_button("3", 3, 2, lambda: press("3"))
+create_button("=", 3, 3, equal)
+
+# Row 4
+create_button("0", 4, 0, lambda: press("0"))
+create_button(".", 4, 1, lambda: press("."))
+create_button("(", 4, 2, lambda: press("("))
+create_button(")", 4, 3, lambda: press(")"))
+
+# ---------------- RUN ----------------
+root.mainloop()
+
+
