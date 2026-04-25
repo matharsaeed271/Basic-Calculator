@@ -22,12 +22,12 @@ color_white = "white"
 ####################################################
 # window setup
 # window = tkinter.Tk()  # create the window
-window.title("Calculator")
-window.resizable(False, False)
+# window.title("Calculator")
+# window.resizable(False, False)
 
-frame = st.Frame(window)
-label = st.Label(frame, text="0", font=("Arial", 45), background=color_black,
-                      foreground=color_white, anchor="e", width=column_count)
+# frame = st.Frame(window)
+# label = st.Label(frame, text="0", font=("Arial", 45), background=color_black,
+#                       foreground=color_white, anchor="e", width=column_count)
 #####################################################
 label.grid(row=0, column=0, columnspan=column_count, sticky="we")
 
